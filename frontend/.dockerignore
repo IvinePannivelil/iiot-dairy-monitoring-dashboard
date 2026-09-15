@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+README.md
+Dockerfile
+.dockerignore
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+*~
+*.swp

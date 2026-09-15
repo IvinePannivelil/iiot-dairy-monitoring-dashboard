@@ -1,0 +1,9 @@
+{
+    "name": "dairy-nodered",
+    "description": "Dairy Edge Node-RED S7 Bridge",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "node-red-contrib-s7": "^3.1.1"
+    }
+}

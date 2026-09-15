@@ -1,0 +1,145 @@
+[
+    {
+        "id": "tab-main",
+        "type": "tab",
+        "label": "Live Telemetry",
+        "disabled": false,
+        "info": "Consolidated Telemetry for all PLCs"
+    },
+    {
+        "id": "influx-config",
+        "type": "influxdb",
+        "hostname": "influxdb",
+        "port": "8086",
+        "protocol": "http",
+        "database": "plc_data",
+        "name": "Dairy InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "s7-endpoint-rec",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "connmode": "rack-slot",
+        "address": "192.168.1.101",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsap": "0x0100",
+        "remotetsap": "0x0200",
+        "timeout": "5000",
+        "readTimeout": "5000",
+        "retries": "3",
+        "vartable": [
+            { "addr": "DB3,REAL406",  "name": "TT1" },
+            { "addr": "DB3,REAL428",  "name": "TT2" },
+            { "addr": "DB3,REAL450",  "name": "TT3" },
+            { "addr": "DB3,REAL472",  "name": "TT4" },
+            { "addr": "DB3,REAL494",  "name": "TT5" },
+            { "addr": "DB3,REAL516",  "name": "TT6" },
+            { "addr": "DB3,REAL620",  "name": "TT7" },
+            { "addr": "DB9,REAL48",   "name": "FM1" },
+            { "addr": "DB9,REAL52",   "name": "FM2" },
+            { "addr": "DB3,REAL594",  "name": "TOT_RECEPTION" },
+            { "addr": "DB3,REAL274",  "name": "TOT_WATER_FLUSH" },
+            { "addr": "DB3,REAL140",  "name": "VFD1_SP" },
+            { "addr": "DB3,REAL362",  "name": "VFD2_SP" },
+            { "addr": "DB14,REAL66",  "name": "VFD1_HZ" },
+            { "addr": "DB14,REAL70",  "name": "VFD2_HZ" },
+            { "addr": "DB3,REAL18",   "name": "RECEP_FLOW_SP" },
+            { "addr": "DB3,REAL22",   "name": "RMST_OUT_SP" },
+            { "addr": "DB1,X0.6",     "name": "RCM_HIGH" },
+            { "addr": "DB1,X0.7",     "name": "RCM_LOW" },
+            { "addr": "DB1,X1.0",     "name": "RMST_HIGH" },
+            { "addr": "DB1,X1.1",     "name": "RMST_LOW" },
+            { "addr": "DB3,X0.4",     "name": "unloadTankRCM" },
+            { "addr": "DB3,X0.5",     "name": "unloadTankRMST" },
+            { "addr": "DB3,X12.0",    "name": "destRcmTank" },
+            { "addr": "DB3,X12.1",    "name": "destRmstTank" }
+        ],
+        "name": "Siemens S7 (Reception)"
+    },
+    {
+        "id": "timer-rec",
+        "type": "inject",
+        "z": "tab-main",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "s7-in-rec"
+            ]
+        ]
+    },
+    {
+        "id": "s7-in-rec",
+        "type": "s7 in",
+        "z": "tab-main",
+        "endpoint": "s7-endpoint-rec",
+        "mode": "all",
+        "variable": "",
+        "diff": false,
+        "name": "Live Telemetry (Reception)",
+        "x": 340,
+        "y": 80,
+        "wires": [
+            [
+                "fn-fmt-rec"
+            ]
+        ]
+    },
+    {
+        "id": "fn-fmt-rec",
+        "type": "function",
+        "z": "tab-main",
+        "name": "Format Reception",
+        "func": "const d = msg.payload;\nif (!d) return null;\n\n// Map Node-RED variable name → InfluxDB field name (kept 1:1 for clarity)\nconst fieldMap = {\n  'TT1':           'TT1',\n  'TT2':           'TT2',\n  'TT3':           'TT3',\n  'TT4':           'TT4',\n  'TT5':           'TT5',\n  'TT6':           'TT6',\n  'TT7':           'TT7',\n  'FM1':           'FM1',\n  'FM2':           'FM2',\n  'TOT_RECEPTION': 'TOT_RECEPTION',\n  'TOT_WATER_FLUSH':'TOT_WATER_FLUSH',\n  'VFD1_SP':       'VFD1_SP',\n  'VFD2_SP':       'VFD2_SP',\n  'VFD1_HZ':       'VFD1_HZ',\n  'VFD2_HZ':       'VFD2_HZ',\n  'RECEP_FLOW_SP': 'RECEP_FLOW_SP',\n  'RMST_OUT_SP':   'RMST_OUT_SP',\n  'RCM_HIGH':      'RCM_HIGH',\n  'RCM_LOW':       'RCM_LOW',\n  'RMST_HIGH':     'RMST_HIGH',\n  'RMST_LOW':      'RMST_LOW',\n  'unloadTankRCM':  'unloadTankRCM',\n  'unloadTankRMST': 'unloadTankRMST',\n  'destRcmTank':    'destRcmTank',\n  'destRmstTank':   'destRmstTank'\n};\n\n// Derived aliases: RCM_TEMP = TT4, RMST_TEMP = TT5 (same physical address)\nconst derived = {\n  'RCM_TEMP':  d['TT4'],\n  'RMST_TEMP': d['TT5']\n};\n\nconst points = [];\n\nfor (const [name, influxField] of Object.entries(fieldMap)) {\n  const val = d[name];\n  if (val !== undefined && val !== null) {\n    points.push({\n      measurement: 'machine_data',\n      tags:   { system: 'reception' },\n      fields: { [influxField]: typeof val === 'boolean' ? (val ? 1 : 0) : parseFloat(val) }\n    });\n  }\n}\n\nfor (const [influxField, val] of Object.entries(derived)) {\n  if (val !== undefined && val !== null) {\n    points.push({\n      measurement: 'machine_data',\n      tags:   { system: 'reception' },\n      fields: { [influxField]: parseFloat(val) }\n    });\n  }\n}\n\nmsg.payload = points;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 80,
+        "wires": [
+            [
+                "influx-out-main"
+            ]
+        ]
+    },
+    {
+        "id": "influx-out-main",
+        "type": "influxdb out",
+        "z": "tab-main",
+        "influxdb": "influx-config",
+        "name": "Write to InfluxDB",
+        "measurement": "plc_tags",
+        "precision": "s",
+        "retentionPolicy": "",
+        "database": "plc_data",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "PLANT_A",
+        "bucket": "plc_data",
+        "x": 800,
+        "y": 140,
+        "wires": []
+    }
+]

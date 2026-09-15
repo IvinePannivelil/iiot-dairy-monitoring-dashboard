@@ -1,0 +1,185 @@
+/* ── Header ────────────────────────────────────────────── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+/* Left – nav trigger */
+.header-left { position: relative; }
+
+.nav-trigger .chevron {
+  transition: transform .25s ease;
+}
+.nav-trigger .chevron.open { transform: rotate(180deg); }
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: dropIn .2s ease;
+  background: var(--nav-bg) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .2s ease;
+}
+.nav-link:hover,
+.nav-link.active {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+.nav-link.active {
+  color: var(--brand-blue);
+}
+
+/* Center – logo */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.logo-l {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Right – actions */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn { padding: 8px; }
+
+.bell-btn { position: relative; }
+.bell-badge {
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--brand-red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-dropdown {
+  right: 0;
+  left: auto;
+  min-width: 280px;
+  padding: 0;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.nd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.nd-header h4 { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.clear-btn { font-size: 11px; color: var(--brand-cyan); cursor: pointer; font-weight: 600; }
+.clear-btn:hover { text-decoration: underline; }
+
+.nd-body {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.nd-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--divider);
+  transition: background .2s;
+  cursor: pointer;
+}
+.nd-item:hover { background: var(--hover-bg); }
+
+.ndi-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.nd-item.critical .ndi-dot { background: #ef4444; }
+.nd-item.warning .ndi-dot { background: var(--brand-orange); }
+.nd-item.info .ndi-dot { background: var(--brand-blue); }
+
+.ndi-text { display: flex; flex-direction: column; gap: 4px; }
+.ndi-text strong { font-size: 12px; color: var(--text-primary); font-weight: 600; }
+.ndi-text span { font-size: 11px; color: var(--text-secondary); }
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(108,190,69,.08);
+  border: 1px solid rgba(108,190,69,.2);
+}
+.status-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand-green);
+}
+
+@media (max-width: 640px) {
+  .header-center { display: none; }
+  .status-text { display: none; }
+}

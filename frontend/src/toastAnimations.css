@@ -1,0 +1,81 @@
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast {
+  position: relative;
+  min-width: 320px;
+  max-width: 420px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-left: 4px solid var(--toast-color, var(--brand-blue));
+  border-radius: 8px;
+  animation: toast-slide-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  color: var(--text-color, #fff); /* Fallback, though glass-panel should handle it */
+}
+
+/* Base Theme Replacements */
+[data-theme='light'] .toast {
+  color: #333;
+}
+
+[data-theme='dark'] .toast {
+  color: #e2e8f0;
+}
+
+.toast-success { --toast-color: #00d4aa; }
+.toast-error   { --toast-color: #ef4444; }
+.toast-warning { --toast-color: #f59e0b; }
+.toast-info    { --toast-color: #1C76BB; }
+
+.toast-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--toast-color);
+}
+
+.toast-content {
+  flex: 1;
+  font-family: var(--font-label, sans-serif);
+  font-size: 0.95rem;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.toast-close:hover {
+  opacity: 1;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.1));
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

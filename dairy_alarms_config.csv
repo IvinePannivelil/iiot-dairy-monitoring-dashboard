@@ -1,0 +1,32 @@
+Source,System,Alarm Name,Tag / Address,Trigger Condition,Low Limit,High Limit,AI Projection Threshold,Alarm Type
+Backend,CIP,CT5 Supply Temp Low,%DB_UNIT2_AUX.DBD4,< 75.0 °C,N/A,N/A,N/A,Analog / Persistent
+Backend,Pasteurizer,Pasteurizer Temp High,%DB_UNIT1.DBD216,> 85.0 °C,N/A,N/A,N/A,Analog / Persistent
+Backend,Reception,Raw Milk Temp Warning,%DB_UNIT3.DBD406,> 5.0 °C,N/A,N/A,N/A,Analog / Persistent
+Backend,Pasteurizer,Pasteurizer Temp Low,%DB_UNIT1.DBD216,< 72.0 °C,N/A,N/A,N/A,Analog / Persistent
+Frontend,Pasteurizer,AI1 (Product Inlet),%DB_UNIT1.DBD204,< 5°C OR > 20°C,5 °C,20 °C,> 20 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI2 (Homo Inlet),%DB_UNIT1.DBD208,< 55°C OR > 78°C,55 °C,78 °C,< 60 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI3 (Holding Inlet),%DB_UNIT1.DBD212,< 68°C OR > 80°C,68 °C,80 °C,< 65 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI4 (Holding Outlet),%DB_UNIT1.DBD216,< 72°C OR > 85°C,72 °C,85 °C,> 83.5 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI5 (Product Outlet),%DB_UNIT1.DBD220,< 4°C OR > 12°C,4 °C,12 °C,> 15 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI6 (Main Hot Water),%DB_UNIT1.DBD224,< 78°C OR > 92°C,78 °C,92 °C,> 92 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI7 (Pre Hot Water),%DB_UNIT1.DBD228,< 60°C OR > 78°C,60 °C,78 °C,> 78 °C,UI & AI Predictive
+Frontend,Pasteurizer,AI8 (Chilled Water),%DB_UNIT1.DBD232,< 0°C OR > 5°C,0 °C,5 °C,> 6 °C,UI & AI Predictive
+Frontend,CIP,CT2 (Hot Water Tank),%DB_UNIT2.DBD4,< 75°C OR > 85°C,75 °C,85 °C,< 75 °C,UI & AI Predictive
+Frontend,CIP,CT3 (Lye Tank),%DB_UNIT2.DBD4,< 70°C OR > 80°C,70 °C,80 °C,< 70 °C,UI & AI Predictive
+Frontend,CIP,CT4 (Acid Tank),%DB_UNIT2.DBD4,< 60°C OR > 75°C,60 °C,75 °C,< 60 °C,UI & AI Predictive
+Frontend,CIP,CT5 (Supply Temp),%DB_UNIT2_AUX.DBD4,< 72°C OR > 90°C,72 °C,90 °C,< 72 °C,UI & AI Predictive
+Frontend,CIP,CT6 (Return Temp),%DB_UNIT2_AUX.DBD4,< 65°C OR > 80°C,65 °C,80 °C,< 65 °C,UI & AI Predictive
+Frontend,CIP,CC1 (Conductivity),%DB_UNIT2_AUX.DBD4,< 0.3 mS/cm OR > 2.5 mS/cm,0.3 mS/cm,2.5 mS/cm,N/A,UI Alarm
+Frontend,CIP,CF1 (Supply Flow),%DB_UNIT2_AUX.DBD4,< 7000 LPH OR > 10000 LPH,7000 LPH,10000 LPH,N/A,UI Alarm
+Frontend,Reception,TT1 (Raw Milk Inlet),%DB_UNIT3.DBD406,< 4°C OR > 12°C,4 °C,12 °C,N/A,UI Alarm
+Frontend,Reception,TT2 (Separator Inlet),%DB_UNIT3.DBD428,< 45°C OR > 60°C,45 °C,60 °C,N/A,UI Alarm
+Frontend,Reception,TT3 (Separator Outlet),%DB_UNIT3.DBD450,< 42°C OR > 55°C,42 °C,55 °C,N/A,UI Alarm
+Frontend,Reception,TT4 (Cream Outlet),%DB_UNIT3.DBD472,< 40°C OR > 52°C,40 °C,52 °C,N/A,UI Alarm
+Frontend,Reception,TT5 (Skim Outlet),%DB_UNIT3.DBD494,< 38°C OR > 50°C,38 °C,50 °C,N/A,UI Alarm
+Frontend,Reception,TT6 (STD Inlet),%DB_UNIT3.DBD516,< 40°C OR > 55°C,40 °C,55 °C,N/A,UI Alarm
+Frontend,Reception,TT7,%DB_UNIT3.DBD58,< 38°C OR > 52°C,38 °C,52 °C,N/A,UI Alarm
+Frontend,Reception,TT8,%DB_UNIT3.DBD66,< 36°C OR > 50°C,36 °C,50 °C,N/A,UI Alarm
+Frontend,Reception,TT9,%DB_UNIT3.DBD74,< 2°C OR > 8°C,2 °C,8 °C,N/A,UI Alarm
+Frontend,Reception,TT10,%DB_UNIT3.DBD82,< 2°C OR > 8°C,2 °C,8 °C,N/A,UI Alarm
+Frontend,Reception,TT11,%DB_UNIT3.DBD90,< 2°C OR > 8°C,2 °C,8 °C,N/A,UI Alarm
+Frontend,Reception,TT12,%DB_UNIT3.DBD98,< 60°C OR > 75°C,60 °C,75 °C,N/A,UI Alarm

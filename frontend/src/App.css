@@ -1,0 +1,7 @@
+/* App-level overrides – keep minimal, most styles in index.css */
+[data-theme] {
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  transition: background .35s ease;
+}

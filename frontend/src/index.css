@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans+Condensed:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+/* ── Brand Tokens ─────────────────────────────────────────── */
+:root {
+  /* Core industrial palette */
+  --brand-blue:    #1C76BB;
+  --brand-green:   #6CBE45;
+  --brand-cyan:    #00d4aa;
+  --brand-orange:  #f59e0b;
+  --brand-red:     #ef4444;
+  --brand-amber:   #f59e0b;
+  --brand-teal:    #00d4aa;
+
+  /* Deep dark mode for industrial monitoring */
+  --bg-base:       #0f1117;
+  --bg-deep:       #080a12;
+  --bg-gradient:   radial-gradient(ellipse at top right, #0e1a2e, #080a12);
+  --text-primary:  #e8edf5;
+  --text-secondary:#8b9ab1;
+  --text-dim:      rgba(139,154,177,.5);
+
+  /* Glass system */
+  --glass-bg:      rgba(255, 255, 255, 0.035);
+  --glass-border:  rgba(255, 255, 255, 0.07);
+  --glass-shadow:  0 8px 32px rgba(0, 0, 0, .6);
+  --glass-blur:    14px;
+
+  /* Interactive */
+  --input-bg:    rgba(255, 255, 255, 0.04);
+  --hover-bg:    rgba(0, 212, 170, 0.05);
+  --badge-bg:    rgba(255, 255, 255, 0.06);
+  --divider:     rgba(255, 255, 255, 0.06);
+  --nav-bg:      rgba(8, 10, 18, 0.92);
+
+  /* Valve LED states */
+  --led-open:    #00d4aa;
+  --led-closed:  #1a2030;
+  --led-trip:    #ef4444;
+  --led-warning: #f59e0b;
+
+  /* Typography — engineering spec */
+  --font-label:   'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
+  --font-ui:      'IBM Plex Sans Condensed', system-ui, sans-serif;
+
+  font-family: var(--font-ui);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg-gradient:   linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  --bg-base:       #e2e8f0;
+  --bg-deep:       #cbd5e1;
+  --text-primary:  #000000;
+  --text-secondary:rgba(0, 0, 0, 0.7);
+  --text-dim:      rgba(0, 0, 0, 0.55);
+  --glass-bg:      rgba(255, 255, 255, 0.85);
+  --glass-border:  rgba(0, 0, 0, 0.1);
+  --glass-shadow:  0 8px 32px rgba(0, 0, 0, 0.1);
+  --input-bg:      rgba(0, 0, 0, 0.05);
+  --hover-bg:      rgba(0, 0, 0, 0.06);
+  --badge-bg:      rgba(0, 0, 0, 0.08);
+  --divider:       rgba(0, 0, 0, 0.12);
+  --nav-bg:        rgba(241, 245, 249, 0.95);
+  --led-closed:    #94a3b8;
+  
+  /* Darker brand colors for contrast on light bg */
+  --brand-blue:    #155a8f;
+  --brand-green:   #4f8c32;
+  --brand-cyan:    #00997a;
+  --brand-orange:  #c27d09;
+  --brand-red:     #c92a2a;
+  --brand-amber:   #c27d09;
+  --brand-teal:    #00997a;
+  
+  color-scheme: light;
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-gradient);
+  background-color: var(--bg-base);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  font-family: var(--font-ui);
+  transition: background 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Typography Utilities ─────────────────────────────────── */
+.numeric, .val-mono {
+  font-family: var(--font-mono) !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.label-eng {
+  font-family: var(--font-label);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ── Custom Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar          { width: 5px; height: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    {
+  background: linear-gradient(180deg, var(--brand-teal), var(--brand-blue));
+  border-radius: 3px;
+}
+
+/* ── Glass Panel ──────────────────────────────────────────── */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.glass-panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, .55);
+}
+
+/* ── Glass Button ─────────────────────────────────────────── */
+.glass-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 212, 170, .25);
+  border-color: rgba(0, 212, 170, .35);
+}
+
+/* ── Utility ──────────────────────────────────────────────── */
+.page-container {
+  flex: 1;
+  padding: 24px 28px 80px;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-label);
+  letter-spacing: 0.05em;
+}
+
+.badge-up     { background: rgba(108,190,69,.15);  color: var(--brand-green); }
+.badge-down   { background: rgba(239,68,68,.15);   color: var(--brand-red); }
+.badge-stable { background: rgba(0,212,170,.12);   color: var(--brand-teal); }
+.badge-warn   { background: rgba(245,158,11,.15);  color: var(--brand-amber); }
+
+/* ── Pulse / Heartbeat animation ──────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(.85); opacity: 1; }
+  70%  { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(.85); opacity: 0; }
+}
+
+@keyframes pulse-ring-red {
+  0%   { transform: scale(.85); opacity: 1; }
+  70%  { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(.85); opacity: 0; }
+}
+
+.pulse-dot {
+  position: relative;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--brand-green);
+  flex-shrink: 0;
+}
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--brand-green);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+.pulse-dot.small { width: 7px; height: 7px; }
+
+/* ── Tank LOW state — pulsing red glow ────────────────────── */
+@keyframes tank-low-glow {
+  0%,100% { box-shadow: 0 0 8px rgba(239,68,68,.2); }
+  50%     { box-shadow: 0 0 20px rgba(239,68,68,.55), 0 0 40px rgba(239,68,68,.2); }
+}
+
+@keyframes blink-border {
+  0%,100% { border-color: rgba(239,68,68,.6); box-shadow: 0 0 10px rgba(239,68,68,.25); }
+  50%     { border-color: rgba(239,68,68,.15); box-shadow: none; }
+}
+
+.tank-low-pulse    { animation: tank-low-glow 2s ease-in-out infinite; }
+.alarm-blink-border{ animation: blink-border 1s ease-in-out infinite; }
+
+/* ── Valve LED dot ────────────────────────────────────────── */
+.led-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background .3s, box-shadow .3s;
+}
+.led-dot.open {
+  background: var(--led-open);
+  box-shadow: 0 0 6px var(--led-open);
+}
+.led-dot.closed {
+  background: var(--led-closed);
+  border: 1.5px solid var(--led-open);
+  box-shadow: none;
+}
+.led-dot.trip {
+  background: var(--led-trip);
+  box-shadow: 0 0 6px var(--led-trip);
+}
+
+/* ── Dec None (link reset) ────────────────────────────────── */
+.dec-none { text-decoration: none; color: inherit; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-container { padding: 14px 12px 80px; }
+  .section-title  { font-size: 16px; }
+}

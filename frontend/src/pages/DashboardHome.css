@@ -1,0 +1,149 @@
+/* ── Overview Dashboard ──────────────────────────────── */
+.overview-page .section-head { margin-bottom: 20px; }
+
+/* ── System Health Banner ──────────────────────────── */
+.system-health {
+  padding: 14px 22px;
+  background: rgba(0,212,170,.05);
+  border: 1px solid rgba(0,212,170,.2);
+  margin-bottom: 20px;
+}
+.sh-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.sh-head h3 { font-size: 14px; font-weight: 700; color: #00d4aa; font-family: var(--font-label); letter-spacing: 0.05em; text-transform: uppercase; }
+.system-health p { font-size: 12px; color: var(--text-secondary); margin-left: 28px; font-family: var(--font-label); }
+
+/* ── Mini Tank Strip ─────────────────────────────────── */
+.tank-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.ts-tanks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  flex: 1;
+}
+/* Compact TankLevelWidget in strip needs override */
+.tank-strip .tank-widget {
+  cursor: pointer;
+  min-height: unset;
+  width: 100%; /* Ensure widget stretches in grid */
+  max-width: none;
+}
+.tank-strip .tank-widget:hover {
+  border-color: rgba(0,212,170,.4);
+  box-shadow: 0 0 14px rgba(0,212,170,.12);
+}
+
+/* ── KPI Row ─────────────────────────────────────────── */
+.plant-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.p-kpi { display: flex; align-items: center; gap: 16px; padding: 16px 20px; }
+.p-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: var(--badge-bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.p-val { display: flex; flex-direction: column; gap: 4px; }
+.p-val span { font-size: 10px; text-transform: uppercase; color: var(--text-secondary); font-family: var(--font-label); font-weight: 600; letter-spacing: 0.06em; }
+.p-val strong { font-size: 20px; font-weight: 700; }
+.p-val small { font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-left: 2px; }
+
+/* ── Overview Complex Grid ───────────────────────────── */
+.overview-complex {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+.oc-main { padding: 22px; display: flex; flex-direction: column; }
+.oc-main h3 { font-size: 13px; font-weight: 700; margin-bottom: 20px; font-family: var(--font-label); letter-spacing: 0.06em; text-transform: uppercase; }
+.large-chart { height: 440px; flex: 1; min-height: 380px; }
+.oc-side { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── System Cards ──────────────────────────────────── */
+.system-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px;
+  color: var(--text-primary);
+  transition: all .25s ease;
+  flex: 1;
+}
+.system-card:hover {
+  transform: translateX(-4px);
+  border-color: rgba(0,212,170,.35);
+  box-shadow: 0 16px 40px rgba(0,212,170,.08);
+}
+.sc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.sc-head h2 { font-size: 14px; font-weight: 700; font-family: var(--font-label); letter-spacing: 0.04em; text-transform: uppercase; }
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--badge-bg);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-label);
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+.status-badge.running {
+  background: rgba(0,212,170,.12);
+  color: #00d4aa;
+}
+.sc-kpis {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex: 1;
+}
+.kpi-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--divider);
+}
+.kpi-l { font-size: 11px; color: var(--text-secondary); font-family: var(--font-label); font-weight: 500; }
+.kpi-v { font-size: 13px; font-weight: 700; }
+.sc-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-label);
+  color: #00d4aa;
+  letter-spacing: 0.04em;
+  margin-top: auto;
+}
+.accent-icon { color: #00d4aa; }
+.dec-none { text-decoration: none; color: inherit; }
+
+@media (max-width: 1300px) {
+  .plant-kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .overview-complex { grid-template-columns: 1fr; }
+  .oc-side { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+}
+@media (max-width: 900px) {
+  .oc-side { grid-template-columns: 1fr; }
+  .ts-tanks { gap: 8px; }
+}

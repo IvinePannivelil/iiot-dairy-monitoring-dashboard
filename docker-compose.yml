@@ -1,0 +1,145 @@
+# ════════════════════════════════════════════════════════════════════════════
+# IIoT Dairy Monitoring — Docker Compose (Production)
+# Stack: React/Nginx · FastAPI · InfluxDB 2.7 · Node-RED (+ S7 driver)
+# Target: Radxa E52C (linux/arm64) — also runs on linux/amd64 for local dev
+#
+# USAGE
+#   Start all services:   docker compose up -d
+#   View logs:            docker compose logs -f
+#   Stop everything:      docker compose down
+#   Full reset:           docker compose down -v   (also wipes InfluxDB data)
+#
+# FIRST RUN
+#   1. Copy .env.example → .env and fill in real token / org values.
+#   2. Run: docker compose up -d
+#   3. InfluxDB UI → http://<host>:8086  (first-run wizard if INIT_MODE=setup)
+#   4. Dashboard   → http://<host>:3001
+#   5. Node-RED    → http://<host>:1880/admin
+#   6. API docs    → http://<host>:5000/docs
+# ════════════════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── InfluxDB Time-Series Historian ─────────────────────────────────────────
+  influxdb:
+    image: influxdb:2.7
+    container_name: dairy_influxdb
+    ports:
+      - "8086:8086"
+    env_file:
+      - ./influxdb/config.env
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - ./influxdb/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  # ── Node-RED PLC Bridge ─────────────────────────────────────────────────────
+  # Custom image: extends nodered/node-red with node-red-contrib-s7 pre-installed
+  nodered:
+    build:
+      context: ./nodered
+    image: dairy-nodered:latest
+    container_name: dairy_nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      # Persist Node-RED state (flows, credentials, installed extra nodes)
+      - nodered_data:/data
+    environment:
+      - NODE_RED_CREDENTIAL_SECRET=${NODERED_CREDENTIAL_SECRET:-dairy-nodered-secret}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:1880/"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # ── Backend IIH Gateway (FastAPI + Python) ──────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+    image: dairy-backend:latest
+    container_name: dairy_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=${INFLUX_TOKEN:-dairy-influx-token-changeme}
+      - INFLUX_ORG=${INFLUX_ORG:-PLANT_A}
+      - INFLUX_BUCKET=${INFLUX_BUCKET:-plc_tags}
+      - NODERED_URL=http://nodered:1880
+      - NODERED_SNAPSHOT_PATH=/plc/snapshot
+      - PREDICTION_INTERVAL_SEC=${PREDICTION_INTERVAL_SEC:-10}
+      - PREDICTION_LOOKBACK_SEC=${PREDICTION_LOOKBACK_SEC:-60}
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      nodered:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # ── Frontend Dashboard (React → Nginx) ─────────────────────────────────────
+  dashboard:
+    build:
+      context: ./frontend
+      args:
+        # These VITE_ vars are baked in at BUILD time — they become part of the
+        # static JS bundle. Change them → rebuild the image.
+        VITE_INFLUX_URL: ${VITE_INFLUX_URL:-http://192.168.1.100:8086}
+        VITE_INFLUX_TOKEN: ${VITE_INFLUX_TOKEN:-dairy-influx-token-changeme}
+        VITE_INFLUX_ORG: ${VITE_INFLUX_ORG:-PLANT_A}
+        VITE_INFLUX_BUCKET: ${VITE_INFLUX_BUCKET:-plc_tags}
+        VITE_IIH_BASE_URL: ${VITE_IIH_BASE_URL:-http://192.168.1.100:5000}
+    image: dairy-dashboard:latest
+    container_name: dairy_dashboard
+    ports:
+      - "3001:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+
+volumes:
+  influxdb_data:
+  nodered_data:

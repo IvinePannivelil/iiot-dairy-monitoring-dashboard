@@ -1,0 +1,23 @@
+# Exclude Windows venv — the Dockerfile builds a fresh Linux one in the builder stage
+.venv
+__pycache__
+*.pyc
+*.pyo
+
+# Secrets — injected at runtime via docker-compose env_file
+.env
+
+# Logs
+*.log
+
+# Dev-only debug/test scripts — never ship these in the Docker image
+check_influx.py
+debug_influx.py
+inject_test_alarms.py
+verify_alarms.py
+start.bat
+
+# VCS / docs
+.git
+.gitignore
+README.md
