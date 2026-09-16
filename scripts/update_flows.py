@@ -1,4 +1,8 @@
 import json
+import os
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+flows_file = os.path.join(ROOT_DIR, 'nodered', 'flows.json')
 
 new_vars = [
     {"addr":"DB3,REAL2","name":"TOT_RMST"},
@@ -20,12 +24,12 @@ new_vars = [
     {"addr":"DB3,REAL362","name":"VFD2_HZ"}
 ]
 
-with open('nodered/flows.json', 'r') as f:
+with open(flows_file, 'r') as f:
     flows = json.load(f)
 
 for node in flows:
     if node.get('id') == 's7-endpoint-rec':
         node['vartable'] = new_vars
 
-with open('nodered/flows.json', 'w') as f:
+with open(flows_file, 'w') as f:
     json.dump(flows, f, indent=4)

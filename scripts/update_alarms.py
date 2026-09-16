@@ -72,7 +72,10 @@ for (idx, word, lo_bit, hi_bit) in ai_map:
     ALARM_CONDITIONS.append({"id": f"ALM-CIP-AI{idx:02d}-HI", "tag": f"CIP_ALM_W{word}", "check": eval(f"lambda w: (int(w) & (1<<{hi_bit})) != 0"), "severity": "critical", "source": "CIP (DB32)", "category": "Process", "desc_fn": lambda v, i=idx: f"AI_{i:02d} High Limit"})
 """
 
-with open('backend/routers/alarms.py', 'r') as f:
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+alarms_file = os.path.join(ROOT_DIR, 'backend', 'routers', 'alarms.py')
+
+with open(alarms_file, 'r', encoding='utf-8') as f:
     code = f.read()
 
 # Replace ALARM_CONDITIONS list
@@ -80,7 +83,7 @@ start = code.find('ALARM_CONDITIONS = [')
 if start != -1:
     end = code.find(']\n\n', start) + 1
     new_code = code[:start] + new_alarms.strip() + "\n" + code[end:]
-    with open('backend/routers/alarms.py', 'w') as f:
+    with open(alarms_file, 'w', encoding='utf-8') as f:
         f.write(new_code)
     print("Rewrote ALARM_CONDITIONS in alarms.py")
 else:

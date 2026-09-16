@@ -1,5 +1,10 @@
 import json
-with open('nodered/flows.json', 'r') as f: flows = json.load(f)
+import os
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+flows_file = os.path.join(ROOT_DIR, 'nodered', 'flows.json')
+
+with open(flows_file, 'r') as f: flows = json.load(f)
 
 for n in flows:
     if n.get('type') == 'function' and n.get('name', '').startswith('Format '):
@@ -11,7 +16,7 @@ for (const [name, val] of Object.entries(d)) {
   if (val !== undefined && val !== null) {
     const addr = addrMap[name] || name;
     points.push({
-      measurement: 'scada_tags',
+      measurement: 'plc_tags',
       tags:   { system: '%s', tag_name: addr },
       fields: { value: typeof val === 'boolean' ? (val ? 1 : 0) : parseFloat(val) }
     });

@@ -2,7 +2,8 @@ import re
 import os
 import json
 
-frontend_dir = r'frontend/src'
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+frontend_dir = os.path.join(ROOT_DIR, 'frontend', 'src')
 data_js_path = os.path.join(frontend_dir, 'data.js')
 
 with open(data_js_path, 'r', encoding='utf-8') as f:

@@ -1,6 +1,7 @@
 import os, re
 
-d = r'frontend/src'
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+d = os.path.join(ROOT_DIR, 'frontend', 'src')
 RADXA = 'http://192.168.1.100:5000'
 LOCAL  = 'http://localhost:5000'
 ENV_EXPR = "(import.meta.env.VITE_IIH_BASE_URL || 'http://localhost:5000')"

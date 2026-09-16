@@ -1,7 +1,8 @@
 import re
 import os
 
-frontend_dir = r'frontend/src'
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+frontend_dir = os.path.join(ROOT_DIR, 'frontend', 'src')
 
 def process_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
